@@ -1,0 +1,87 @@
+a{
+  text-decoration: none;
+}
+body{
+  background: #f6f6f6;
+  width: pxTorem(750px);
+  height: auto;
+  margin: 0 auto;
+}
+.content{
+  width: pxTorem(750px);
+  height: auto;
+  margin: 0 auto;
+  overflow-y: auto;
+  margin-bottom: pxTorem(60px);
+  // background: #
+}
+.vux-divider{
+  font-size: pxTorem(28px);
+  font-weight: bolder;
+  color: #31BFF7 !important;
+  margin:8px 0 !important;
+}
+.vux-badge{
+  padding: 1px 8px !important;
+  height: 18px !important
+}
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.weui-dialog__btn_primary{
+  color: #1296DB
+}
+.vux-header{
+  background:  #1296DB !important;
+}
+.vux-header-back{
+  color: #fff !important
+}
+.left-arrow{
+  color: #fff !important
+}
+// .vux-header .vux-header-left .left-arrow:before{
+//       border: 1px solid #fff !important;
+// }
+.vux-button-group > a.vux-button-tab-item-last:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 200%;
+    height: 1px;
+    border-color: #fff !important;
+    height: 200%;
+    -webkit-transform-origin: left top;
+    transform-origin: left top;
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+    z-index: 1;
+    border-top-right-radius: 32px;
+    border-bottom-right-radius: 32px;
+}
+.vux-button-group > a.vux-button-tab-item-first:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 200%;
+    border-color: #fff !important;
+    color: #fff !important;
+    height: 200%;
+    -webkit-transform-origin: left top;
+    transform-origin: left top;
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+    border-top-left-radius: 32px;
+    border-bottom-left-radius: 32px;
+}
+
+.weui-btn_plain-primary{
+  border-color: #1296DB !important;
+  color: #1296DB !important
+}
