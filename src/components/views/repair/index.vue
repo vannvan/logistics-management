@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-
+    <div class="doRepairBox">
     <x-header>我要报修</x-header>
     <div class="formBox">
       <x-input title="联系电话"  placeholder="请输入联系电话" v-model="tel" :show-clear=false keyboard="number" is-type="china-mobile" :max="11"></x-input>
@@ -37,10 +37,12 @@
          </template>
      </popup>
    </div>
+   </div>
   </div>
 </template>
 
 <script>
+import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { mapState } from 'vuex'
 import areaList from '@/assets/json/area.js'
 import typeList from '@/assets/json/type.js'
@@ -65,14 +67,12 @@ export default {
   },
   computed:{
     ...mapState({
-        isLoading: state => state.pageSwitch.isLoading,
         userInfo: state => state.userInfo.userInfo,
-        ajaxIsLoading: state => state.ajaxSwitch.ajaxIsLoading,
-        responseData: state => state.responseInfo.response
+        isLogin:state => state.userInfo.isLogin
     }),
   },
   mounted(){
-
+    // console.log(this.isLogin)
   },
   methods:{
     choseArea(){
@@ -120,6 +120,10 @@ export default {
       }
     },
     chooseImage(){
+      if(this.isLogin==false){
+        this.showModule('该模块需要登录！')
+        return false
+      }
       var e=window.event||event;
       let file = e.target.files[0];
       // console.log(file)
@@ -133,7 +137,7 @@ export default {
                'X-Requested-With': 'XMLHttpRequest'
            },
          }
-         this.$http.post('/Api/File/uploadFile',formData,config)
+         this.$http.post(URL_CONFIG.UrlConfig.uploadFile,formData,config)
          .then(res =>{
             console.log(res.data.data)
             if(res.data.status==1){
@@ -154,8 +158,8 @@ export default {
         delete tmpPhotoFile[i].absolute_path
         delete tmpPhotoFile[i].user_id
       }
-      if(user_name==null){
-        this.showModule('该功能需要登录！')
+      if(this.isLogin==false){
+        this.showModule('该模块需要登录！')
         return false
       }
       let datas={
@@ -170,7 +174,7 @@ export default {
         area_:this.area.substring(0,2)
       }
       // console.log(datas)
-      this.$http.post('Api/Service/doRepair',datas)
+      this.$http.post(URL_CONFIG.UrlConfig.studentDoRepair,datas)
       .then(res =>{
         if(res.data.status==1){
           this.$vux.toast.text(res.data.msg, 'middle')
@@ -191,75 +195,78 @@ export default {
 </script>
 
 <style lang="scss">
-.formBox{
-  width: pxTorem(700px);
-  margin:pxTorem(25px) auto;
-  box-shadow: #ccc 0px 3px 5px;
-  height: auto;
-  background: #fff
+.doRepairBox{
+  .formBox{
+    width: pxTorem(700px);
+    margin:pxTorem(25px) auto;
+    box-shadow: #ccc 0px 3px 5px;
+    height: auto;
+    background: #fff
+  }
+  .weui-cell:before{
+    left:0 !important
+  }
+  .photoBox{
+    // height: pxTorem(180px);
+    padding: pxTorem(25px);
+    width: pxTorem(650px);
+    border-top: 1px solid #d9d9d9
+    // background: #f00
+  }
+  .uploadbtn{
+    // position: relative;
+    float: left;
+    display: block;
+    height: pxTorem(150px);
+    width: pxTorem(140px);
+    margin-top: pxTorem(15px);
+    // background: url('~@/assets/images/upload_btn1.png') no-repeat;
+    @include bg100('~@/assets/images/upload_btn1.png');
+    background-size: 100% auto;
+  }
+  .uploadbtn input {
+    height: pxTorem(150px);
+    width: pxTorem(140px)!important;
+    // position: absolute;
+    // // font-size: 100px;
+    // top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+  .photoList{
+    float: left;
+    height: pxTorem(150px);
+    width: auto;
+    // background: #f00;
+    margin-top: pxTorem(15px);
+    margin-right: pxTorem(15px);
+  }
+  .photoList>span{
+    display: block;
+    width: pxTorem(150px);
+    height: pxTorem(150px);
+    position: relative;
+  }
+  .photoList>span>span>i{
+    position: absolute;
+    right: pxTorem(-20px);
+    top:pxTorem(-15px)
+  }
+  .photoList>span>img{
+    width: pxTorem(150px);
+    height: pxTorem(150px);
+  }
+  .submitbtn{
+    width: pxTorem(600px);
+    height: pxTorem(80px);
+    background: #1296DB;
+    margin:pxTorem(35px) auto;
+    text-align: center;
+    color: #fff;
+    line-height: pxTorem(80px);
+    font-size: pxTorem(30px);
+    border-radius: pxTorem(40px)
+  }
 }
-.weui-cell:before{
-  left:0 !important
-}
-.photoBox{
-  // height: pxTorem(180px);
-  padding: pxTorem(25px);
-  width: pxTorem(650px);
-  border-top: 1px solid #d9d9d9
-  // background: #f00
-}
-.uploadbtn{
-  // position: relative;
-  float: left;
-  display: block;
-  height: pxTorem(150px);
-  width: pxTorem(140px);
-  margin-top: pxTorem(15px);
-  // background: url('~@/assets/images/upload_btn1.png') no-repeat;
-  @include bg100('~@/assets/images/upload_btn1.png');
-  background-size: 100% auto;
-}
-.uploadbtn input {
-  height: pxTorem(150px);
-  width: pxTorem(140px)!important;
-  // position: absolute;
-  // // font-size: 100px;
-  // top: 0;
-  opacity: 0;
-  filter: alpha(opacity=0);
-}
-.photoList{
-  float: left;
-  height: pxTorem(150px);
-  width: auto;
-  // background: #f00;
-  margin-top: pxTorem(15px);
-  margin-right: pxTorem(15px);
-}
-.photoList>span{
-  display: block;
-  width: pxTorem(150px);
-  height: pxTorem(150px);
-  position: relative;
-}
-.photoList>span>span>i{
-  position: absolute;
-  right: pxTorem(-20px);
-  top:pxTorem(-15px)
-}
-.photoList>span>img{
-  width: pxTorem(150px);
-  height: pxTorem(150px);
-}
-.submitbtn{
-  width: pxTorem(600px);
-  height: pxTorem(80px);
-  background: #1296DB;
-  margin:pxTorem(35px) auto;
-  text-align: center;
-  color: #fff;
-  line-height: pxTorem(80px);
-  font-size: pxTorem(30px);
-  border-radius: pxTorem(40px)
-}
+
 </style>

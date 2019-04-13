@@ -68,6 +68,7 @@ export default {
     },
     ...mapState({
         userInfo: state => state.userInfo.userInfo,
+        isLogin:state => state.userInfo.isLogin
     }),
   },
   components: {
@@ -82,8 +83,7 @@ export default {
   },
   mounted() {
     //do something after mounting vue instance
-    let adminInfo=this.userInfo
-    if(adminInfo.name==''){
+    if(!this.isLogin){
       this.$router.push({
         path:"/adminLogin"
       })

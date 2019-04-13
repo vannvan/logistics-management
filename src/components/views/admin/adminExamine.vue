@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import URL_CONFIG from '@/assets/js/urlConfig.js';
 import repairList from '@/components/common/repairList'
 import { mapState } from 'vuex'
 import { ButtonTab, ButtonTabItem, Divider,XHeader } from 'vux'
@@ -72,7 +73,7 @@ export default {
         datas.area=''
       }
       // if()
-      this.$http.post('Api/Repair/getRepairList',datas)
+      this.$http.post(URL_CONFIG.UrlConfig.pubGetRepairList,datas)
       .then(res =>{
         // console.log(res)
         if(res.data.status==1){

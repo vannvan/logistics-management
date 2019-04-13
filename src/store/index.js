@@ -6,12 +6,14 @@ import router from '@/router'
 Vue.use(Vuex);
 import userInfo_store from './userInfo'
 import common_stroe from './common'
+import action_store from './actionStatus'
 // import classroom_store from './classroom'
 const store = new Vuex.Store({
     modules: {
       // classroom:classroom_store
       userInfo:userInfo_store,
-      responseInfo:common_stroe
+      responseInfo:common_stroe,
+      actionStatus:action_store
     },
     plugins:[createPersistedState({
       storage: window.sessionStorage

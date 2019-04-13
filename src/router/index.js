@@ -10,8 +10,8 @@ export default new Router({
       redirect: '/serviceCenter'
     },
     {
-      path: '/footNav',
-      component: resolve => require(['@/components/common/footNav'], resolve),
+      path: '/student',
+      component: resolve => require(['@/components/common/student'], resolve),
       children:[
         {
           path: '/userCenter',
@@ -49,10 +49,10 @@ export default new Router({
           }
         },
         {
-          path: '/frame',
-          component: resolve => require(['@/components/common/frame'], resolve),
+          path: '/areaManage',
+          component: resolve => require(['@/components/views/user/areaManage'], resolve),
           meta:{
-              title:''
+              title:'地址管理'
           }
         },
         {
@@ -177,6 +177,65 @@ export default new Router({
 
       ]
     },
+    {
+      path:'/worker',
+      component: resolve => require(['@/components/common/worker'], resolve),
+      children:[
+        {
+          path: '/workerLogin',
+          component: resolve => require(['@/components/views/worker/login'], resolve),
+          meta:{
+              title:'维修工登录'
+          }
+        },
+        {
+          path: '/workerCenter',
+          component: resolve => require(['@/components/views/worker/workerCenter'], resolve),
+          meta:{
+              title:'维修工中心'
+          }
+        },
+        {
+          path: '/workerRepairCenter',
+          component: resolve => require(['@/components/views/worker/RepairCenter'], resolve),
+          meta:{
+              title:'我的工单'
+          }
+        },
+        {
+          path: '/workerRepairRecords',
+          component: resolve => require(['@/components/views/worker/repairRecords'], resolve),
+          meta:{
+              title:'维修记录'
+          }
+        },
+        {
+          path: '/workerRepairDetails',
+          component: resolve => require(['@/components/views/worker/repairDetails'], resolve),
+          meta:{
+              title:'工单详情'
+          }
+        },
+        {
+          path: '/workerDetails',
+          component: resolve => require(['@/components/views/worker/workerDetails'], resolve),
+          meta:{
+              title:'个人信息'
+          }
+        },
+        {
+          path: '/myWorkmate',
+          component: resolve => require(['@/components/views/worker/myWorkmate'], resolve),
+          meta:{
+              title:'工友通讯录'
+          }
+        },
+
+
+
+
+      ]
+    }
 
 
 

@@ -37,12 +37,13 @@
           <p style="font-size:14px;line-height:1.5;">{{item.title}}</p>
         </div>
       </card>
-      <divider><span class="more" @click="getInspectList(10)">更多</span></divider>
+      <divider v-if="hasMore"><span class="more" @click="getInspectList(10)">更多</span></divider>
     </div>
   </div>
 </template>
 
 <script>
+import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { mapState } from 'vuex'
 import { ButtonTab, ButtonTabItem, Divider,Card,Badge } from 'vux'
 export default {
@@ -53,6 +54,7 @@ export default {
       repairList:[],
       InspectList:[],
       pageSize:10,
+      hasMore:false
     }
   },
   components: {
@@ -102,11 +104,12 @@ export default {
       let datas={
         "pageSize":this.pageSize
       }
-      this.$http.post('/Api/Xfuapi/getRepairList',datas)
+      this.$http.post(URL_CONFIG.UrlConfig.getRepairList,datas)
       .then(res =>{
         this.currText='网络报修信息'
         this.activeTab=0
         this.repairList=res.data.data.rows
+        this.hasMore = true
         // console.log(this.repairList)
       })
     },
@@ -117,11 +120,12 @@ export default {
       let datas={
         "pageSize":this.pageSize
       }
-      this.$http.post('/Api/Xfuapi/getInspectList',datas)
+      this.$http.post(URL_CONFIG.UrlConfig.getInspectList,datas)
       .then(res =>{
         this.currText='服务监督信息'
         this.activeTab=1
         this.InspectList=res.data.data.rows
+        this.hasMore = true
         // console.log(this.InspectList)
       })
     },

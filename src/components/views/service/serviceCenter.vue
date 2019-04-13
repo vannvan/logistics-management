@@ -20,6 +20,7 @@
 
 <script>
 // require("@/assets/json/getBanner.js");
+import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { mapState } from 'vuex'
 import { Swiper,Divider,Grid, GridItem} from 'vux'
 export default {
@@ -48,7 +49,7 @@ export default {
   },
   methods: {
     getBanner() {
-      this.$http.get('/Api/Xfuapi/getBannerList')
+      this.$http.get(URL_CONFIG.UrlConfig.getBannerList)
       // this.$http.get('/api/getBanner')
       .then(res =>{
         // console.log(res.data.errorCode)
@@ -61,7 +62,7 @@ export default {
       })
     },
     getServiceList(){
-      this.$http.get('/Api/Xfuapi/getService')
+      this.$http.get(URL_CONFIG.UrlConfig.getServiceList)
       .then(res =>{
         if(res.data.errorCode==0){
           this.serviceList=res.data.data
@@ -69,7 +70,7 @@ export default {
       })
     },
     getConvenientList(){
-      this.$http.get('/Api/Xfuapi/getConvenientList')
+      this.$http.get(URL_CONFIG.UrlConfig.getServiceList)
       .then(res =>{
         if(res.data.errorCode==0){
           this.convenientList=res.data.data

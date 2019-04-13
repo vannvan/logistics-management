@@ -1,11 +1,12 @@
 <template>
   <div>
+    <div class="pubRepairDetails">
     <x-header>报修详情</x-header>
     <template v-if="isLoaded!=false">
       <div class="detailBox clearfix">
         <p class="detail_title">
           <badge :text="repairDatail.text_category" :style="{background:RandomColor()}"></badge>
-          <span class="icon-price-tags" style="font-size:8px">{{repairDatail.repair_num}}</span>
+          <span class="icon-price-tags">{{repairDatail.repair_num}}</span>
           <span>{{repairDatail.date}}</span>
         </p>
         <div class="detail_content">
@@ -43,11 +44,12 @@
     <template v-else>
       <load-more tip="正在加载"></load-more>
     </template>
-
+  </div>
   </div>
 </template>
 
 <script>
+import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { mapState } from 'vuex'
 import { Badge,XHeader,LoadMore,Divider } from 'vux'
 export default {
@@ -92,7 +94,7 @@ export default {
         let datas={
           "repairId":this.$route.query.repairId
         }
-        this.$http.post('/Api/Xfuapi/getRepairredirect',datas)
+        this.$http.post(URL_CONFIG.UrlConfig.getRepairredirect,datas)
         .then(res =>{
           let timeArr=res.data.data.process.time
           let statusArr=res.data.data.process.status
@@ -118,88 +120,92 @@ export default {
 </script>
 
 <style lang="scss">
-.vux-divider{
-  padding: 10px 3% !important;
+.pubRepairDetails{
+  padding-bottom: pxTorem(30px);
+  .vux-divider{
+    padding: 10px 3% !important;
+  }
+  .detailBox,.processBox{
+    width: 90%;
+    height: auto;
+    margin: pxTorem(25px) auto 0 auto;
+    background: #F2F7F0;
+    padding: 8px 8px 15px 8px;
+    box-shadow: #ccc 0px 3px 5px;
+  }
+  .detail_title{
+    height: auto;
+    // font-size: 18px;
+    margin-bottom: 5px;
+  }
+  .detail_title>span:nth-child(1){
+    margin-bottom: 5px;
+  }
+  .detail_title>span:nth-child(2){
+    font-size: pxTorem(25px);
+    // color: #f00
+  }
+  .detail_title>span:nth-child(3){
+    float: right;
+  }
+  .detail_info{
+    width: 100%;
+    margin-bottom: 5px;
+  }
+  .detail_info>span{
+    margin-right: 12px;
+  }
+  .detail_content{
+    line-height: 24px;
+    margin-bottom: 5px;
+  }
+  .timeBox{
+    // width:10%;
+    height: auto;
+    // background: #ccc;
+    float: left;
+  }
+  .stepBox{
+    width: 5%;
+    height: auto;
+    background: #f00;
+    float: left;
+  }
+  .stepBox>p{
+    position: relative;
+  }
+  // .stepBox>p::before{
+  //   content: '';
+  //   display: block;
+  //   position: absolute;  /*日常绝对定位*/
+  //   left:0;
+  //   top:0;
+  //   height: 8px;
+  //   width: 8px;
+  //   background: #000;
+  // }
+  .infoBox{
+    // background:
+    width:85%;
+    height: auto;
+    float: left;
+    // overflow-x:scroll;
+  }
+  .infoBox>p:nth-child(odd){
+    font-size: 15px;
+    font-weight: bolder;
+    white-space :nowrap
+  }
+  .timeBox>p{
+    display: block;
+    background: #f00;
+    font-size: 6px;
+    margin-bottom: 15px;
+  }
+  .statusBox{
+    width: 10%;
+    float: left;
+  }
 }
-.detailBox,.processBox{
-  width: 90%;
-  height: auto;
-  margin: pxTorem(25px) auto 0 auto;
-  background: #F2F7F0;
-  padding: 8px 8px 15px 8px;
-  box-shadow: #ccc 0px 3px 5px;
-}
-.detail_title{
-  height: auto;
-  // font-size: 18px;
-  margin-bottom: 5px;
-}
-.detail_title>span:nth-child(1){
-  margin-bottom: 5px;
-}
-.detail_title>span:nth-child(2){
-  font-size: 8px;
-  // color: #f00
-}
-.detail_title>span:nth-child(3){
-  float: right;
-}
-.detail_info{
-  width: 100%;
-  margin-bottom: 5px;
-}
-.detail_info>span{
-  margin-right: 12px;
-}
-.detail_content{
-  line-height: 24px;
-  margin-bottom: 5px;
-}
-.timeBox{
-  // width:10%;
-  height: auto;
-  // background: #ccc;
-  float: left;
-}
-.stepBox{
-  width: 5%;
-  height: auto;
-  background: #f00;
-  float: left;
-}
-.stepBox>p{
-  position: relative;
-}
-// .stepBox>p::before{
-//   content: '';
-//   display: block;
-//   position: absolute;  /*日常绝对定位*/
-//   left:0;
-//   top:0;
-//   height: 8px;
-//   width: 8px;
-//   background: #000;
-// }
-.infoBox{
-  // background:
-  width:85%;
-  height: auto;
-  float: left;
-  // overflow-x:scroll;
-}
-.infoBox>p:nth-child(odd){
-  font-size: 15px;
-  font-weight: bolder;
-  white-space :nowrap
-}
-.timeBox>p{
-  display: block;
-  background: #f00;
-  font-size: 6px;
-  margin-bottom: 15px;
-}
-.statusBox{
-  width: 10%;
-  float: left;
-}
+
 </style>

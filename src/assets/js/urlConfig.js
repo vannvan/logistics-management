@@ -1,121 +1,87 @@
-//正式
-var VSCHOOL_URL = 'http://wx10.hw.thinkjoy.cn',
-    WXCENTER_URL = 'http://wx02.hw.thinkjoy.cn',
-    PROXY_URL = 'http://wx03.hw.thinkjoy.cn';
 //开发
-// var VSCHOOL_URL = '/vs',
-//     WXCENTER_URL = '/wx',
-//     PROXY_URL = '/proxy';
-
+var BASE_URL = '/Api';
+var isPro = process.env.NODE_ENV === 'production'
+if(isPro){
+  BASE_URL= 'http://127.0.0.1/composerProject/logistics-management-api/public/home'
+}
 const UrlConfig = {
-  //================================================================================sx
-  joinUs: VSCHOOL_URL +"/userApply/joinUs", //教师获取作业列表
+    //  公共模块
+    getBannerList:BASE_URL + '/Xfuapi/getBannerList',  //首页banner
 
-  getUser: VSCHOOL_URL +"/apply/getUser?token=", //获取用户
+    getServiceList:BASE_URL + '/Xfuapi/getServiceList',  //首页服务
 
-  getUserInfoAndStuInfo: VSCHOOL_URL +"/userInfo/getUserInfoAndStuInfo", //获取用户和孩子
+    getConvenientList:BASE_URL +'/Xfuapi/getConvenientList',  //首页便民
 
-  getSignature: WXCENTER_URL +"/agent/config", //获取微信参数
+    getRepairList:BASE_URL + '/Xfuapi/getRepairList',  // 公开报修
 
-  uploadByServerId: WXCENTER_URL +"/agent/media", //提交serverId
+    getInspectList:BASE_URL + '/Xfuapi/getInspectList', //公开监督
 
-  sendDiscoveryInfo: VSCHOOL_URL +"/discovery/sendDiscoveryInfo?token=", //发班圈
+    getIntendredirect:BASE_URL + '/Xfuapi/getIntendredirect', //监督详情
 
-  sendClassAlbum: VSCHOOL_URL +"/album/upload?token=", //发班圈
+    getRepairredirect:BASE_URL + '/Xfuapi/getRepairredirect', //报修详情
 
-  getProxyRole: PROXY_URL +"/auth/role/", //获取角色信息
+    uploadFile:BASE_URL +'/file/uploadFile',//上传图片
 
-  getProxyWx: PROXY_URL +"/auth/wx/", //获取wx登录信息
+    //学生模块
 
-  getProxyAuth: PROXY_URL +"/auth/", //获取wx登录信息
+    studentDoLogin:BASE_URL + '/user/doLogin', //学生登录
 
-  qtzhcsxx: PROXY_URL +"/school/", //取学校信息
+    StudentUpdateInfo:BASE_URL + '/user/updateInfo', //学生更新信息
 
-  getAlbumListByClassId: VSCHOOL_URL +"/album/getAlbumListByClassId?token=", //获取班级相册列表
+    studentGetRepairList:BASE_URL + '/Service/getRepairList',//获取报修记录
 
-  delPhoto: VSCHOOL_URL +"/album/delPhoto?token=", //删除相册
+    studentGetRepairDetails:BASE_URL + '/Service/getRepairDetails',//获取报修详情
 
-  getNoticeList: VSCHOOL_URL +"/notice/getNoticeInfos?token=", //查询通知列表
+    studentDoRater:BASE_URL + '/Service/doRater', //评价
 
-  getStudentsByClassCode: VSCHOOL_URL +"/userInfo/getStudentsByClassCode?token=", //查询班级下的所有孩子
+    studentDoRepair:BASE_URL + '/Service/doRepair',//提交报修
 
-  sendNoticeInfo: VSCHOOL_URL +"/notice/sendNoticeInfo?token=", //发送通知
+    //管理员模块
 
-  getReaderList: VSCHOOL_URL +"/notice/getReaderList?token=", //已阅人列表
+    adminDoLogin:BASE_URL + '/admin/dologin',//登录
 
-  getHomeworkList: VSCHOOL_URL +"/homework/getHomeworkList?token=", //作业列表
+    adminUpdateInfo:BASE_URL + '/admin/updateInfo',//跟新信息
 
-  getSubjectsByUid: VSCHOOL_URL +"/homework/getSubjectsByUid?token=", //获取科目
+    adminUpdatePassword:BASE_URL + '/admin/updatePassword',//更改密码
 
-  sendWorkInfo: VSCHOOL_URL +"/homework/sendHomeworkInfo?token=", //发作业
+    getAdminList:BASE_URL + '/admin/getAdminList',//管理员列表
 
-  getHomeworkDetail: VSCHOOL_URL +"/homework/getHomeworkDetail?token=", //作业详情
+    getAdminInfo:BASE_URL + '/admin/getAdminInfo',//管理员信息
 
-  getNoticeDetailByCode: VSCHOOL_URL +"/notice/getNoticeDetailByCode?token=", //通知详情
+    changeAdminStatus:BASE_URL + '/admin/changeAdminStatus',//更改管理员status
 
-  changeRoleType: VSCHOOL_URL +"/userInfo/changeRoleType?token=", //切换身份
+    updateOneAdminInfo:BASE_URL + '/admin/updateOneAdminInfo',//超级管理员更改某个管理员信息
 
-  //================================================================================cll
-  completeUserInfo: VSCHOOL_URL +"/userInfo/completeUserInfo?token=", //完善个人信息
+    doAddAdmin:BASE_URL + '/admin/doAddAdmin',//添加管理员
 
-  getParUserInfoAndStuInfo: VSCHOOL_URL +"/userInfo/getParUserInfoAndStuInfo?token=", //获取家长用户信息和孩子
+    updateOneWorkerInfo:BASE_URL + '/worker/updateOneWorkerInfo',//超级管理员更改某个维修工信息
 
-  updateFamName: VSCHOOL_URL +"/userInfo/updateFamName?token=", //修改家长名称
+    doAddWorker:BASE_URL + '/worker/doAddWorker',//添加维修工
 
-  addStuInfo: VSCHOOL_URL +"/userInfo/addStuInfo?token=", //添加学生
+    dispatchedWorker:BASE_URL + '/service/dispatchedWorker',//派工
 
-  delStudentByChildCode: VSCHOOL_URL +"/userInfo/delStudentByChildCode?token=",//根据学生编号删除学生信息
+    // 管理员和维修工公共模块
 
-  editStuInfo: VSCHOOL_URL +"/userInfo/editStuInfo?token=",//修改学生信息
+    getWorkerList:BASE_URL + '/worker/getWorkerList',//获取维修工列表
 
-  getTeaUserInfo: VSCHOOL_URL +"/userInfo/getTeaUserInfo?token=",//获取教师用户信息
+    getWorkerInfo:BASE_URL + '/worker/getWorkerInfo',//获取维修工信息
 
-  getTeachClass: VSCHOOL_URL +"/apply/getTeachClass?token=", //获取教师所带班级信息
+    changeWorkerStatus:BASE_URL + '/worker/changeWorkerStatus',//管理员更改worker的status
 
-  getClassListByGradeCode: VSCHOOL_URL +"/userInfo/getClassListByGradeCode?token=",//获取学校班级信息
+    pubGetRepairList:BASE_URL + '/repair/getRepairList',//获取报修列表
 
-  getGradeListBySchoolCode: VSCHOOL_URL +"/userInfo/getGradeListBySchoolCode?token=",//获取学校年级信息
+    pubGetRepairDetails:BASE_URL + '/service/getRepairDetails',//获取报修详情
 
-  getDiscoveryListByClassId: VSCHOOL_URL +"/discovery/getDiscoveryListByClassId?token=", //根据班级ID获取班圈列表
+    //维修工模块
 
-  getNewCommentDetail:VSCHOOL_URL +"/discovery/getNewCommentDetail?token=",//
+    workerDoLogin:BASE_URL + '/worker/doLogin',//登录
 
-  praise:VSCHOOL_URL +"/discovery/praise?token=",//班圈点赞
+    workerUpdateInfo:BASE_URL + '/worker/updateInfo',//更新信息
 
-  delDiscovery:VSCHOOL_URL +"/discovery/delDiscovery?token=",//删除班圈
+    workerUpdatePassword:BASE_URL + '/worker/updatePassword',//更改密码
 
-  sendComment:VSCHOOL_URL +"/discovery/sendComment?token=",//发送班圈评论
+    finishWork:BASE_URL + '/service/finishWork',//完成维修
 
-  delComment:VSCHOOL_URL +"/discovery/delComment?token=",//删除评论
-
-  getNewCommentInfo:VSCHOOL_URL +"/discovery/getNewCommentInfo?token=",//获取新回复提醒
-
-  getNewCommentDetail:VSCHOOL_URL +"/discovery/getNewCommentDetail?token=",//获取新回复详情
-
-  getBanners:VSCHOOL_URL +"/discovery/getBanners?token=",//获取轮播图
-
-  getMyClassList:VSCHOOL_URL +"/userInfo/getMyClassList?token=",//获取我所有孩子的班级列表
-
-  //微官网
-  getBannerList:VSCHOOL_URL +"/wgw/getBannerList?token=",//获取banner列表
-
-  getBannerByBannerCode:VSCHOOL_URL +"/wgw/getBannerByBannerCode?token=",//通过bannerCode获取banner详情
-
-  getColumnList:VSCHOOL_URL +"/wgw/getColumnList?token=",//获取学校栏目
-
-  getNewArticleList:VSCHOOL_URL +"/wgw/getNewArticleList?token=",//获取最新文章列表
-
-  getArticleListByColumnCode:VSCHOOL_URL +"/wgw/getArticleListByColumnCode?token=",//根据栏目code查询文章列表
-
-  getArticleByArticleCode:VSCHOOL_URL +"/wgw/getArticleByArticleCode?token=",//根据文章code或栏目code查询文章详情
-
-  getPictureByColumnCode:VSCHOOL_URL +"/wgw/getPictureByColumnCode?token=",//根据栏目code查询相册详情
-
-  //通讯录
-
-  getParents:VSCHOOL_URL +"/addressBook/getParents?token=",//获取所有学生家长的通讯录
-
-  getAllTeachers:VSCHOOL_URL +"/addressBook/getAllTeachers?token=",//获取本校的所有教师信息列表
 };
 
 export default {

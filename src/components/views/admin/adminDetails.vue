@@ -72,7 +72,7 @@
               <input type="number" name="" v-model="admin_tel"  oninput="if(value.length > 11)value = value.slice(0, 11)">
             </template>
             <template v-if="leftPop.type=='password'">
-              <input type="text" name="" v-model="admin_password">
+              <input type="password" name="" v-model="admin_password">
             </template>
           </div>
 
@@ -83,6 +83,7 @@
 </template>
 
 <script>
+import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { mapState } from 'vuex'
 import { Cell, Group, Popup,XInput, XButton, XHeader } from 'vux'
 export default {
@@ -149,7 +150,7 @@ export default {
                'X-Requested-With': 'XMLHttpRequest'
            },
          }
-         this.$http.post('/Api/File/uploadFile',formData,config)
+         this.$http.post(URL_CONFIG.UrlConfig.uploadFile,formData,config)
          .then(res =>{
             console.log(res.data.data)
             if(res.data.status==1){
@@ -177,7 +178,7 @@ export default {
         area:this.userInfo.area,
         level:this.userInfo.level
       }
-      this.$http.post('Api/admin/updateInfo',datas)
+      this.$http.post(URL_CONFIG.UrlConfig.adminUpdateInfo,datas)
       .then(res =>{
         if(res.data.status==1){
           this.$vux.toast.text(res.data.msg, 'middle')
@@ -196,7 +197,7 @@ export default {
         password:this.admin_password,
         id:this.userInfo.id
       }
-      this.$http.post("Api/admin/updatePassword",datas)
+      this.$http.post(URL_CONFIG.UrlConfig.adminUpdatePassword,datas)
       .then(res =>{
         if(res.data.status==1){
           this.$vux.toast.text(res.data.msg, 'middle')
@@ -206,6 +207,7 @@ export default {
       })
     },
     back(){
+      this.admin_password = ''
       if(this.admin_name!=this.userInfo.name){
         if(this.saveStatus==0){
           this.admin_name=this.userInfo.name

@@ -19,7 +19,7 @@ module.exports = {
         }
       },
       '/Api': {
-        target: 'http://127.0.0.1/composerProject/logistics-management/public/home', //西安翻译学院接口
+        target: 'http://127.0.0.1/composerProject/logistics-management-api/public/home',
         changeOrigin: true,
         pathRewrite: {
           '^/Api': ''
@@ -28,7 +28,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: '192.168.0.112', // can be overwritten by process.env.HOST
     port: 8099, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,

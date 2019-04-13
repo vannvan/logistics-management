@@ -8,7 +8,7 @@
               <badge :text="toHouer(item.finishSpend)"></badge>
              </span>
              <span style="float:right" v-else>
-               <badge :text="process(item.process)"></badge>
+               <badge :text="process(item.process).txt" :style="process(item.process)"></badge>
              </span>
            </p>
           <p style="font-size:14px;line-height:1.5;">类型：{{item.type}}</p>
@@ -18,14 +18,14 @@
         </div>
       </card>
     </template>
-
-    <template v-else="repairList.length==0">
+    <template v-else>
       <Empty></Empty>
     </template>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Empty from '@/components/common/empty'
 import { formatDate } from '@/assets/js/date.js';
 import { ButtonTab, ButtonTabItem, Divider,Card,Badge,XHeader,LoadMore } from 'vux'
@@ -52,6 +52,9 @@ export default {
     }
   },
   computed:{
+    ...mapState({
+        userInfo: state => state.userInfo.userInfo,
+    }),
     toHouer(){
       return function(minutes){
         if(Math.floor(minutes/60)>0){
@@ -63,21 +66,25 @@ export default {
     },
     process(){
       return function(process){
+        let formatProcess = {
+          txt:'',
+          color:''
+        }
         switch(process){
           case 1:
-          return '已申报';
+          return formatProcess = {txt:'已申报',background:'#ff0000'}
           break;
           case 2:
-          return '已审核';
+          return formatProcess = {txt:'已审核',background:'#00CC99'}
           break;
           case 3:
-          return '已派工';
+          return formatProcess = {txt:'已派工',background:'#CEEF00'}
           break;
           case 5:
-          return '已完工';
+          return formatProcess = {txt:'已完工',background:'#009933'}
           break;
           case 4:
-          return '已转单';
+          return formatProcess = {txt:'已转单',background:'#BF7E00'}
           break;
         }
       }
@@ -102,12 +109,24 @@ export default {
       this.repairList=data
     },
     gotoRepairDetails(id){
-      this.$router.push({
-        path:'/adminRepairDetails',
-        query:{
-          "repair_id":id
-        }
-      });
+      console.log(this.userInfo.userType)
+      if(this.userInfo.userType=='admin'){
+        this.$router.push({
+          path:'/adminRepairDetails',
+          query:{
+            "repair_id":id
+          }
+        })
+      }
+      if(this.userInfo.userType=='worker'){
+        this.$router.push({
+          path:'/workerRepairDetails',
+          query:{
+            "repair_id":id
+          }
+        });
+      }
+
     }
   }
 }

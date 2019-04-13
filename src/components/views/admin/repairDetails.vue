@@ -6,13 +6,30 @@
 </template>
 
 <script>
+import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { XHeader } from 'vux'
+import { mapState } from 'vuex'
 import pubRepairDetails from '@/components/common/pubRepairDetails'
 export default {
   data(){
     return{
 
     }
+  },
+  computed:{
+    ...mapState({
+        actionStatus:state => state.actionStatus.actionStatus
+    }),
+  },
+  watch:{
+    actionStatus:{
+      handler(newV){
+        if(newV){
+          this.getInspectDetail()
+        }
+      }
+    },
+    immediate:true
   },
   components:{
     pubRepairDetails,XHeader
@@ -24,24 +41,18 @@ export default {
   methods: {
     getInspectDetail(){
       let repair_id=this.$route.query.repair_id
-      console.log(repair_id)
+      // console.log(repair_id)
       // return
       if(repair_id!=''||repair_id!=undefined){
         let datas={
           "repair_id":repair_id
         }
-        this.$http.post('/Api/Service/getRepairDetails',datas)
+        this.$http.post(URL_CONFIG.UrlConfig.pubGetRepairDetails,datas)
         .then(res =>{
           if(res.data.status==1){
             this.$refs.getData.getReapairDetails(res.data.data)
-            // console.log(res.data.data)
-            // this.repairDatail=res.data.data
-            // this.processList=res.data.data.processInfo
-            // for(let i)
-            // console.log(this.processList)
+            this.$store.commit('setActionStatus',false)
           }
-            // this.isLoaded=true
-          // }
         })
       }
     },

@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { mapState } from 'vuex'
 export default {
   data(){
@@ -48,7 +49,9 @@ export default {
 
   },
   mounted() {
-
+    //do something after mounting vue instance
+    this.$store.commit('setUserInfo',)
+    this.$store.commit('setIsLogin',false)
   },
   methods: {
     doLogin(){
@@ -64,11 +67,12 @@ export default {
         this.$vux.toast.text('密码不能为空', 'middle')
         return
       }
-      this.$http.post('Api/admin/doLogin',datas)
+      this.$http.post(URL_CONFIG.UrlConfig.adminDoLogin,datas)
       .then(res =>{
         if(res.data.status==1){
           res.data.data.userType="admin"
           this.$store.commit('setUserInfo',res.data.data)
+          this.$store.commit('setIsLogin',true)
           this.$router.push({
             path:'/adminCenter',
           });
@@ -101,9 +105,13 @@ export default {
   }
   .formBox{
     width: pxTorem(650px);
-    height: pxTorem(560px);
-    // background: #fff;
-    margin:pxTorem(500px) auto 0 auto;
+    height: pxTorem(400px);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin: auto;
   }
   .inputBox{
     position: relative;

@@ -3,12 +3,15 @@
     <template v-if="isLoaded!=false">
       <div class="detailBox clearfix">
         <p class="detail_title">
-          <badge :text="process(repairDatail.process)" :style="{background:RandomColor()}"></badge>
-          <span class="icon-price-tags" style="font-size:8px">{{repairDatail.repair_num}}</span>
+          <badge :text="process(repairDatail.process).txt" :style="process(repairDatail.process)"></badge>
+          <span class="icon-price-tags">{{repairDatail.repair_num}}</span>
           <span>{{repairDatail.date|date}}</span>
         </p>
         <div class="detail_content">
-          {{repairDatail.content}}
+          故障详情：{{repairDatail.details}}
+        </div>
+        <div class="detail_content">
+          联系方式：<a :href="'tel:' + repairDatail.tel">{{repairDatail.tel}}</a>
         </div>
         <p class="detail_footer">
           <span class="icon-user">{{repairDatail.user_name}}</span>
@@ -19,14 +22,14 @@
       <template v-if="repairDatail.process==1&&userInfo.userType=='admin'">
         <divider>派工维修</divider>
         <div class="workerBox">
-          <div class="workerInfo">
+          <div class="workerType">
             {{areaType}}/{{workerType}}工
           </div>
           <div class="workerList clearfix">
             <template v-if="workerList.length!=0">
               <group>
                 <template v-for="(item, index) in workerList">
-                  <cell :title="item.name" is-link @click.native="getWorkerInfo(item.id)">
+                  <cell :title="item.name" is-link @click.native="getWorkerInfo(item.worker_id,'popShow')">
                     <i class="icon-user" slot="icon" :style="{color:statusColor(item.status)}"></i>
                     <span>{{item.tel}}</span>
                   </cell>
@@ -43,25 +46,55 @@
         </div>
       </template>
       <template v-if="repairDatail.process!=1">
-        <divider>进度详情</divider>
+        <divider>报修进度</divider>
         <div class="processBox clearfix">
             <template v-for="(item, index) in processList">
                     <div style="width:100%;margin-bottom:15px;height:auto;" class="clearfix">
-                      <div style="width:10%;display:block;float:left;margin-right:2%;">
+                      <div style="width:10%;display:block;float:left;margin-right:2%">
                       {{item.time|dateTime}}
                       </div>
-                      <div style="width:88%;display:block;float:left">
+                      <div style="width:85%;display:block;float:left;">
                         <p style="font-size:16px;" :style="{color:RandomColor()}">{{item.status}}</p>{{item.info}}
                       </div>
                     </div>
             </template>
-          <div class="stepBox">
-            <template v-for="i in 5">
-              <p></p>
-            </template>
-          </div>
         </div>
       </template>
+      <!-- 维修工操作 -->
+      <template v-if="userInfo.userType=='worker'&&repairDatail.process==3">
+        <div class="workerActionBox">
+          <x-button type="primary" plain @click.native="fanishWork(repairDatail.repair_id)">完成维修</x-button>
+          <!-- <x-button type="warn" plain @click.native="fanishWork(repairDatail.repair_id)">转交工单</x-button> -->
+        </div>
+      </template>
+      <!-- 管理员操作 -->
+      <template v-if="userInfo.userType=='admin'&&repairDatail.process==3">
+        <div class="workerInfo">
+          <group>
+            <cell title="维修工姓名">
+              <span>{{workerInfo.name}}</span>
+            </cell>
+            <cell title="联系电话">
+              <a :href="'tel:' + workerInfo.tel">{{workerInfo.tel}}</a>
+            </cell>
+          </group>
+          <!-- <group>
+            <x-button type="warn" plain @click.native="">重新派工</x-button>
+          </group> -->
+        </div>
+      </template>
+      <template v-if="repairDatail.process==5">
+        <div class="raterBox">
+          <cell title="管理员评分">
+            <rater v-model="repairDatail.admin_rater" star="☻" active-color="#FF9900"  :font-size=30 :margin="6" disabled></rater>
+          </cell>
+          <cell title="维修工评分">
+            <rater v-model="repairDatail.worker_rater" star="☻" active-color="#FF9900" :font-size=30 :margin="6"  disabled></rater>
+          </cell>
+        </div>
+
+      </template>
+
     </template>
     <template v-else>
       <load-more tip="正在加载"></load-more>
@@ -71,10 +104,11 @@
 </template>
 
 <script>
+import URL_CONFIG from '@/assets/js/urlConfig.js';
 import workerPop from '@/components/common/workerPop'
 import { mapState } from 'vuex'
 import { formatDate } from '@/assets/js/date.js';
-import { Badge,XHeader,LoadMore,Divider,Group,Cell } from 'vux'
+import { Badge,XHeader,LoadMore,Divider,Group,Cell,XButton,Rater } from 'vux'
 export default {
   data(){
     return{
@@ -89,6 +123,7 @@ export default {
       },
       areaType:'',
       workerType:'',
+      workerInfo:[]
     }
   },
   components: {
@@ -98,7 +133,9 @@ export default {
     Divider,
     Group,
     Cell,
-    workerPop
+    workerPop,
+    XButton,
+    Rater
   },
   filters:{
     date:function(timestamp){
@@ -114,8 +151,7 @@ export default {
     ...mapState({
         isLoading: state => state.pageSwitch.isLoading,
         userInfo: state => state.userInfo.userInfo,
-        ajaxIsLoading: state => state.ajaxSwitch.ajaxIsLoading,
-        responseData: state => state.responseInfo.response
+        actionStatus:state => state.actionStatus.actionStatus
     }),
     RandomColor() {
       return function(){
@@ -133,30 +169,29 @@ export default {
         }else{
           return "#18B500"
         }
-        // let r, g, b;
-        // r = Math.floor(Math.random() * 256);
-        // g = Math.floor(Math.random() * 256);
-        // b = Math.floor(Math.random() * 256);
-        // return "rgb(" +r + ',' +g+ ',' +b+ ")";
       }
     },
     process(){
       return function(process){
+        let formatProcess = {
+          txt:'',
+          color:''
+        }
         switch(process){
           case 1:
-          return '已申报';
+          return formatProcess = {txt:'已申报',background:'#ff0000'}
           break;
           case 2:
-          return '已审核';
+          return formatProcess = {txt:'已审核',background:'#00CC99'}
           break;
           case 3:
-          return '已派工';
+          return formatProcess = {txt:'已派工',background:'#CEEF00'}
           break;
           case 5:
-          return '已完工';
+          return formatProcess = {txt:'已完工',background:'#009933'}
           break;
           case 4:
-          return '已转单';
+          return formatProcess = {txt:'已转单',background:'#BF7E00'}
           break;
         }
       }
@@ -164,13 +199,21 @@ export default {
   },
   mounted(){
     // this.getWorkerList()
+    //根据工单进度调取相应接口
+    // console.log(this.actionStatus)
   },
   methods: {
     getReapairDetails(data) {
       this.isLoaded=true
       this.repairDatail=data
       this.processList=data.processInfo
-      this.getWorkerList()
+      if(this.userInfo.userType=='admin'){
+        this.getWorkerList()
+      }
+      // 当工单状态为3的时候获取维修工信息
+      if(this.repairDatail.process==3){
+        this.getWorkerInfo(this.repairDatail.worker_id,'getInfo')
+      }
     },
     getWorkerList(){
       let type = this.repairDatail.type
@@ -183,45 +226,71 @@ export default {
         type:this.workerType,
         area:this.areaType
       }
-      this.$http.post("Api/Worker/getWorkerList",datas)
+      this.$http.post(URL_CONFIG.UrlConfig.getWorkerList,datas)
       .then(res =>{
         if(res.data.status==1){
           this.workerList=res.data.data
         }
       })
     },
-    getWorkerInfo(worker_id){
+    getWorkerInfo(worker_id,type){
       let datas = {
-        id:worker_id
+        worker_id:worker_id
       }
       // console.log(datas)
       // return
-      this.$http.post('Api/Worker/getWorkerInfo',datas)
+      this.$http.post(URL_CONFIG.UrlConfig.getWorkerInfo,datas)
       .then(res =>{
         // console.log(res)
         if(res.data.status==1){
-          this.leftPop.show=true
-          // this.workerInfo=res.data.data
-          this.$refs.workerData.getWorkerInfo(res.data.data)
+          if(type=='popShow'){
+            this.leftPop.show=true
+            this.$refs.workerData.getWorkerInfo(res.data.data)
+          }
+          if(type=='getInfo'){
+            this.workerInfo=res.data.data
+          }
+
         }
       })
     },
+    fanishWork(service_id){
+      this.$store.commit('setActionStatus',true)
+        let datas = {
+          service_id:service_id,
+          worker_name:this.userInfo.name
+        }
+      this.$http.post(URL_CONFIG.UrlConfig.finishWork,datas)
+      .then(res =>{
+        if(res.data.status==1){
+          this.$vux.toast.text(res.data.msg, 'middle')
+          this.$store.commit('setActionStatus',true)
+        }
+      })
+    }
   }
 }
 </script>
 
 <style lang="scss">
 .pubRepairList{
-
-  .workerBox{
+  padding-bottom: pxTorem(70px);
+  .vux-divider{
+    padding: 10px 3% !important;
+  }
+  .workerBox,.raterBox,.processBox,.detailBox,.workerActionBox,.workerInfo{
     width: 90%;
     height: auto;
     margin: pxTorem(25px) auto 0 auto;
-    background: #fff;
+    background: #F2F7F0;
     padding: 8px 8px 15px 8px;
     box-shadow: #ccc 0px 3px 5px;
-    .workerInfo{
+    .workerType{
       text-align: center;
+      font-size: pxTorem(28px)
+    }
+    .weui-cells{
+      background: #f2f7f0 !important
     }
   }
   .emptyWorker{
@@ -235,14 +304,7 @@ export default {
     margin: pxTorem(30px) auto;
     border-radius: pxTorem(10px)
   }
-  .detailBox,.processBox{
-    width: 90%;
-    height: auto;
-    margin: pxTorem(25px) auto 0 auto;
-    background: #F2F7F0;
-    padding: 8px 8px 15px 8px;
-    box-shadow: #ccc 0px 3px 5px;
-  }
+
   .detail_title{
     height: auto;
     // font-size: 18px;
@@ -252,7 +314,7 @@ export default {
     margin-bottom: 5px;
   }
   .detail_title>span:nth-child(2){
-    font-size: 8px;
+    font-size: pxTorem(25px);
     // color: #f00
   }
   .detail_title>span:nth-child(3){
@@ -284,16 +346,6 @@ export default {
   .stepBox>p{
     position: relative;
   }
-  // .stepBox>p::before{
-  //   content: '';
-  //   display: block;
-  //   position: absolute;  /*日常绝对定位*/
-  //   left:0;
-  //   top:0;
-  //   height: 8px;
-  //   width: 8px;
-  //   background: #000;
-  // }
   .infoBox{
     // background:
     width:85%;

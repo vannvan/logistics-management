@@ -30,7 +30,7 @@
                 {{workerInfo.name}}
               </cell>
               <cell title="手机号">
-                {{workerInfo.tel}}
+                <a :href="'tel:' + workerInfo.tel">{{workerInfo.tel}}</a>
               </cell>
               <cell title="工作状态">
                 <span v-html="formatWorkStatus(workerInfo.workstatus)"></span>
@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { XButton,Cell,Group,Popup } from 'vux'
 import { mapState } from 'vuex'
 export default {
@@ -69,7 +70,8 @@ export default {
   },
   computed:{
     ...mapState({
-      userInfo: state => state.userInfo.userInfo
+      userInfo: state => state.userInfo.userInfo,
+      actionStatus:state => state.actionStatus.actionStatus
     }),
     formatWorkStatus(){
       return function (status) {
@@ -110,19 +112,12 @@ export default {
         admin_name:this.userInfo.name,
         service_id:this.$route.query.repair_id
       }
-      this.$http.post("Api/service/dispatchedWorker",datas)
+      this.$http.post(URL_CONFIG.UrlConfig.dispatchedWorker,datas)
       .then(res =>{
         if(res.data.status==1){
           this.$vux.toast.text(res.data.msg, 'middle')
           this.leftPop.show=false
-          this.$router.go(0)
-          // this.$router.push({
-          //   path:'/adminRepairDetails',
-          //   query:{
-          //     "repair_id":this.$route.query.repair_id
-          //   }
-          // });
-          // this.$router.push({path:'/adminRepairCenter'})
+          this.$store.commit('setActionStatus',true)
         }
       })
       console.log(datas)

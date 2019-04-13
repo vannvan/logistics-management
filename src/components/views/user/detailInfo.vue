@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { mapState } from 'vuex'
 import { Cell, Group, Popup,XInput, XButton, XHeader } from 'vux'
 export default {
@@ -89,10 +90,7 @@ export default {
   },
   computed:{
     ...mapState({
-        isLoading: state => state.pageSwitch.isLoading,
         userInfo: state => state.userInfo.userInfo,
-        ajaxIsLoading: state => state.ajaxSwitch.ajaxIsLoading,
-        responseData: state => state.responseInfo.response
     }),
   },
   mounted(){
@@ -115,7 +113,7 @@ export default {
                'X-Requested-With': 'XMLHttpRequest'
            },
          }
-         this.$http.post('/Api/File/uploadFile',formData,config)
+         this.$http.post(URL_CONFIG.UrlConfig.uploadFile,formData,config)
          .then(res =>{
             console.log(res.data.data)
             if(res.data.status==1){
@@ -135,9 +133,10 @@ export default {
         student_id:this.userInfo.student_id, //必须
         headimg_path:this.userInfo.headimg_path,
         student_name:this.student_name,
-        tel:this.tel
+        tel:this.tel,
+        student_pwd:this.userInfo.student_pwd
       }
-      this.$http.post('Api/user/updateInfo',datas)
+      this.$http.post(URL_CONFIG.UrlConfig.StudentUpdateInfo,datas)
       .then(res =>{
         if(res.data.status==1){
           this.$vux.toast.text(res.data.msg, 'middle')

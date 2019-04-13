@@ -9,7 +9,7 @@
     <div class="workerList">
       <group>
         <template v-for="(item, index) in workerList">
-          <cell :title="item.name" is-link @click.native="getWorkerInfo(item.id)">
+          <cell :title="item.name" is-link @click.native="getWorkerInfo(item.worker_id)">
             <i class="icon-user" slot="icon" :style="{color:statusColor(item.status)}"></i>
             <span>{{item.tel}}</span>
           </cell>
@@ -36,8 +36,8 @@
               <div class="header-title">
                 <div class="left-arrow"></div>
                 <b class="backbtn" @click="leftPop.show=!leftPop.show">返回</b>
-                <span class="saveBtn">
-                  <x-button mini @click.native="updateInfo(workerInfo.id);leftPop.show=!leftPop.show">保存</x-button>
+                <span class="saveBtn" v-if="userInfo.level==2">
+                  <x-button mini @click.native="updateInfo(workerInfo.worker_id);leftPop.show=!leftPop.show">保存</x-button>
                 </span>
               </div>
             </div>
@@ -82,12 +82,12 @@
             <template v-if="userInfo.level==2">
               <div class="actionBox">
                 <template v-if="workerInfo.status==0">
-                  <x-button type="primary" plain @click.native="changeWorkerStatus(workerInfo.id,1)">启用</x-button>
+                  <x-button type="primary" plain @click.native="changeWorkerStatus(workerInfo.worker_id,1)">启用</x-button>
                 </template>
                 <template v-else>
-                  <x-button type="warn" plain @click.native="changeWorkerStatus(workerInfo.id,0)">禁用</x-button>
+                  <x-button type="warn" plain @click.native="changeWorkerStatus(workerInfo.worker_id,0)">禁用</x-button>
                 </template>
-                <x-button type="warn" @click.native="changeWorkerStatus(workerInfo.id,-1)">删除</x-button>
+                <x-button type="warn" @click.native="changeWorkerStatus(workerInfo.worker_id,-1)">删除</x-button>
               </div>
             </template>
           </div>
@@ -100,6 +100,7 @@
 </template>
 
 <script>
+import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { mapState } from 'vuex'
 import typeList from '@/assets/json/type.js'
 import { XButton,ButtonTab, ButtonTabItem, Divider,XHeader,Cell, CellBox, CellFormPreview, Group, Badge,Popup,PopupRadio } from 'vux'
@@ -128,7 +129,6 @@ export default {
         type:'',
       },
       workerInfo:[],
-
       isReadOnly:true
     }
   },
@@ -210,7 +210,7 @@ export default {
       this.getWorkerList()
     },
     choseType(){
-      console.log(this.typeList)
+      // console.log(this.typeList)
       if(this.isAll==true){
         this.typeList[0]={text:'全部'}
       }
@@ -236,7 +236,7 @@ export default {
       if(datas.area=='全校'){
         datas.area=''
       }
-      this.$http.post("Api/Worker/getWorkerList",datas)
+      this.$http.post(URL_CONFIG.UrlConfig.getWorkerList,datas)
       .then(res =>{
         if(res.data.status==1){
           this.workerList=res.data.data
@@ -245,11 +245,11 @@ export default {
     },
     getWorkerInfo(worker_id){
       let datas = {
-        id:worker_id
+        worker_id:worker_id
       }
       // console.log(datas)
       // return
-      this.$http.post('Api/Worker/getWorkerInfo',datas)
+      this.$http.post(URL_CONFIG.UrlConfig.getWorkerInfo,datas)
       .then(res =>{
         // console.log(res)
         if(res.data.status==1){
@@ -260,10 +260,10 @@ export default {
     },
     changeWorkerStatus(worker_id,status){
       let datas = {
-        id:worker_id,
+        worker_id:worker_id,
         status:status
       }
-      this.$http.post("Api/Worker/changeWorkerStatus",datas)
+      this.$http.post(URL_CONFIG.UrlConfig.changeWorkerStatus,datas)
       .then(res =>{
         if(res.data.status==1){
           this.$vux.toast.text(res.data.msg, 'middle')
@@ -275,13 +275,13 @@ export default {
     updateInfo(worker_id){
       // console.log(this.workerInfo.type)
       let datas ={
-        id:worker_id,
+        worker_id:worker_id,
         area:this.workerInfo.area,
         type:this.workerInfo.type
         // level:this.workerInfo.level
       }
       // console.log(datas)
-      this.$http.post("Api/Worker/updateOneWorkerInfo",datas)
+      this.$http.post(URL_CONFIG.UrlConfig.updateOneWorkerInfo,datas)
       .then(res =>{
         if(res.data.status==1){
           this.$vux.toast.text(res.data.msg, 'middle')

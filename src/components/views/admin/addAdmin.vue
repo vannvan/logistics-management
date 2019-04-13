@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { mapState } from 'vuex'
 import { XButton,XHeader,XInput,Group,PopupRadio,Popup,Cell  } from 'vux'
 export default {
@@ -77,7 +78,7 @@ export default {
                'X-Requested-With': 'XMLHttpRequest'
            },
          }
-         this.$http.post('/Api/File/uploadFile',formData,config)
+         this.$http.post(URL_CONFIG.UrlConfig.uploadFile,formData,config)
          .then(res =>{
             // console.log(res.data.data)
             if(res.data.status==1){
@@ -95,7 +96,7 @@ export default {
         area:this.area
       }
       // console.log(datas)
-      this.$http.post("Api/admin/doAddAdmin",datas)
+      this.$http.post(URL_CONFIG.UrlConfig.doAddAdmin,datas)
       .then(res =>{
         if(res.data.status==1){
           this.$vux.toast.text(res.data.msg, 'middle')

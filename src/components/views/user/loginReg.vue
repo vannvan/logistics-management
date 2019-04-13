@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { mapState } from 'vuex'
 export default {
   data(){
@@ -34,7 +35,7 @@ export default {
         isLoading: state => state.pageSwitch.isLoading,
         // ajaxIsLoading: state => state.ajaxSwitch.ajaxIsLoading,
         responseData: state => state.responseInfo.response,
-        userInfo: state => state.userInfo.userInfo
+        userInfo: state => state.userInfo.userInfo,
     }),
     RandomColor() {
       return function(){
@@ -48,7 +49,8 @@ export default {
 
   },
   mounted() {
-
+    this.$store.commit('setUserInfo',)
+    this.$store.commit('setIsLogin',false)
   },
   methods: {
     doLogin(){
@@ -64,10 +66,12 @@ export default {
         this.$vux.toast.text('密码不能为空', 'middle')
         return
       }
-      this.$http.post('Api/User/doLogin',datas)
+      this.$http.post(URL_CONFIG.UrlConfig.studentDoLogin,datas)
       .then(res =>{
         if(res.data.status==1){
-          this.$store.commit('setUserInfo',res.data.data[0])
+          res.data.data.userType="student"
+          this.$store.commit('setIsLogin',true)
+          this.$store.commit('setUserInfo',res.data.data)
           this.$router.push({
             path:'/userCenter',
           });
@@ -100,9 +104,13 @@ export default {
   }
   .formBox{
     width: pxTorem(650px);
-    height: pxTorem(560px);
-    // background: #fff;
-    margin:pxTorem(500px) auto 0 auto;
+    height: pxTorem(400px);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin: auto;
   }
   .inputBox{
     position: relative;

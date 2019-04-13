@@ -19,7 +19,7 @@
             <div class="header-title">
               <div class="left-arrow"></div>
               <b class="backbtn" @click="leftPop.show=!leftPop.show">返回</b>
-              <span class="saveBtn">
+              <span class="saveBtn" v-if="userInfo.level==2">
                 <x-button mini @click.native="updateInfo(adminInfo.id);leftPop.show=!leftPop.show">保存</x-button>
               </span>
             </div>
@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { mapState } from 'vuex'
 import { XButton,ButtonTab, ButtonTabItem, Divider,XHeader,Cell, CellBox, CellFormPreview, Group, Badge,Popup,PopupRadio } from 'vux'
 export default {
@@ -168,7 +169,7 @@ export default {
   },
   methods:{
     getAdminList(){
-      this.$http.post("Api/admin/getAdminList")
+      this.$http.post(URL_CONFIG.UrlConfig.getAdminList)
       .then(res =>{
         if(res.data.status==1){
           this.adminList=res.data.data
@@ -181,7 +182,7 @@ export default {
       }
       // console.log(datas)
       // return
-      this.$http.post('Api/admin/getAdminInfo',datas)
+      this.$http.post(URL_CONFIG.UrlConfig.getAdminInfo,datas)
       .then(res =>{
         // console.log(res)
         if(res.data.status==1){
@@ -195,7 +196,7 @@ export default {
         id:admin_id,
         status:status
       }
-      this.$http.post("Api/admin/changeAdminStatus",datas)
+      this.$http.post(URL_CONFIG.UrlConfig.changeAdminStatus,datas)
       .then(res =>{
         if(res.data.status==1){
           this.$vux.toast.text(res.data.msg, 'middle')
@@ -211,7 +212,7 @@ export default {
         level:this.adminInfo.level
       }
       // console.log(datas)
-      this.$http.post("Api/admin/updateOneAdminInfo",datas)
+      this.$http.post(URL_CONFIG.UrlConfig.updateOneAdminInfo,datas)
       .then(res =>{
         if(res.data.status==1){
           this.$vux.toast.text(res.data.msg, 'middle')

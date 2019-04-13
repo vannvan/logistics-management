@@ -8,12 +8,13 @@
     </button-tab>
     <divider>{{currText}}</divider>
     <repairList ref="getData"></repairList>
-    <divider v-show="hasMore"><span class="more" @click="getMore(10)">更多</span></divider>
+    <divider v-if="hasMore"><span class="more" @click="getMore(10)">更多</span></divider>
     </div>
   </div>
 </template>
 
 <script>
+import URL_CONFIG from '@/assets/js/urlConfig.js';
 import repairList from '@/components/common/repairList'
 import { mapState } from 'vuex'
 import { ButtonTab, ButtonTabItem, Divider,XHeader } from 'vux'
@@ -23,7 +24,7 @@ export default {
       repairList:[],
       currText:'未完成',
       pageSize:10,
-      hasMore:true
+      hasMore:false
     }
   },
   components: {
@@ -62,26 +63,28 @@ export default {
         process=[1,2,3,4]
         this.currText='未完成'
       }
-      if(this.userInfo.area='全校'){
-        this.userInfo.area=''
-      }
       let datas = {
         process:process,
         area:this.userInfo.area,
         pageSize:this.pageSize,
-        admin_id:''
+        admin_id:this.userInfo.admin_id,  //admin_id和admin_level必须同时存在
+        admin_level:this.userInfo.level
+      }
+      if(datas.area='全校'){
+        datas.area=''
       }
       // if()
-      this.$http.post('Api/Repair/getRepairList',datas)
+      this.$http.post(URL_CONFIG.UrlConfig.pubGetRepairList,datas)
       .then(res =>{
         // console.log(res)
         if(res.data.status==1){
           // this.repairList=res.data.data
           this.$refs.getData.getRepairList(res.data.data)
-          if(res.data.data.length%10!=0){
-            this.hasMore=false
+          if(res.data.data.length%10!=0||res.data.data.length==0){
+            this.hasMore = false
+          }else{
+            this.hasMore = true
           }
-          // console.log(this.repairList.length)
         }
       })
     },
