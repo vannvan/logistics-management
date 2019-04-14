@@ -36,6 +36,15 @@ const UrlConfig = {
 
     studentDoRepair:BASE_URL + '/Service/doRepair',//提交报修
 
+    getMessageByUserId:BASE_URL + '/message/getMessageByUserId',//获取消息列表
+
+    updateMessageStatus:BASE_URL + '/message/updateMessageStatus',// 更改短信状态
+
+    getUserArea:BASE_URL + '/user/getUserArea',//获取地址
+
+    addArea:BASE_URL + '/user/addArea',//添加地址
+
+
     //管理员模块
 
     adminDoLogin:BASE_URL + '/admin/dologin',//登录

@@ -49,6 +49,13 @@ export default new Router({
           }
         },
         {
+          path: '/studentMessage',
+          component: resolve => require(['@/components/views/user/message'], resolve),
+          meta:{
+              title:'我的消息'
+          }
+        },
+        {
           path: '/areaManage',
           component: resolve => require(['@/components/views/user/areaManage'], resolve),
           meta:{

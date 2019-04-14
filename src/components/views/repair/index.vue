@@ -1,8 +1,8 @@
 <template lang="html">
   <div>
     <div class="doRepairBox">
-    <x-header>我要报修</x-header>
-    <div class="formBox">
+    <x-header :right-options="{showMore: true}" @on-click-more="showMenus = true">我要报修</x-header>
+    <div class="repairFormBox">
       <x-input title="联系电话"  placeholder="请输入联系电话" v-model="tel" :show-clear=false keyboard="number" is-type="china-mobile" :max="11"></x-input>
       <cell title="选择区域" v-model="area" is-link @click.native="choseArea()"></cell>
       <x-input title="详细地址"  placeholder="请填写详细地址" v-model="areadetail" v-if="area!=''" :show-clear="false" required></x-input>
@@ -20,6 +20,11 @@
         <span class="uploadbtn" v-if="photoFile.length<3">
           <input type="file" @change="chooseImage()" accept="image/*" ref="chooseImage"/>
         </span>
+      </div>
+    </div>
+    <div class="areaTips">
+      <div>
+        <actionsheet :menus="menus" v-model="showMenus" show-cancel  @on-click-menu="chooseUserArea"></actionsheet>
       </div>
     </div>
     <div class="submitbtn" @click="doSubmit()">提交信息</div>
@@ -46,7 +51,7 @@ import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { mapState } from 'vuex'
 import areaList from '@/assets/json/area.js'
 import typeList from '@/assets/json/type.js'
-import { XInput,XHeader,Cell,XTextarea,Popup,XButton,Group,PopupPicker,Icon,AlertModule } from 'vux'
+import { XInput,XHeader,Cell,XTextarea,Popup,XButton,Group,PopupPicker,Actionsheet, TransferDom} from 'vux'
 export default {
   data(){
     return{
@@ -60,10 +65,15 @@ export default {
       typeShow:false,
       areaShow:false,
       photoFile:[],
+      showMenus:false,
+      menus: {
+        myarea: '使用我的地址',
+      },
+      userArea:{}
     }
   },
   components:{
-    XInput,XHeader,Cell,XTextarea,Popup,XButton,Group,PopupPicker,Icon,AlertModule
+    XInput,XHeader,Cell,XTextarea,Popup,XButton,Group,PopupPicker,Actionsheet, TransferDom
   },
   computed:{
     ...mapState({
@@ -73,9 +83,15 @@ export default {
   },
   mounted(){
     // console.log(this.isLogin)
+    if(this.isLogin){
+      this.getUserArea()
+    }
   },
   methods:{
     choseArea(){
+      if(this.area!=''){
+        this.area = ''
+      }
       if(this.areaList.length==0){
         this.areaList=areaList.areaList
         this.area=''
@@ -83,6 +99,7 @@ export default {
       this.areaShow=true
     },
     checkArea(item){
+      // console.log(this.area)
       if(item.children!=undefined){
         this.area+=item.text+'/'
       }else{
@@ -117,6 +134,27 @@ export default {
       }
       if(item.children==undefined){
         this.typeShow=false
+      }
+    },
+    getUserArea() {
+      let datas = {
+        student_id:this.userInfo.student_id
+      }
+      this.$http.post(URL_CONFIG.UrlConfig.getUserArea,datas)
+      .then(res =>{
+        if(res.data.status==1){
+          this.userArea = res.data.data
+        }
+      })
+    },
+    chooseUserArea(key){
+      if(key=='myarea'){
+        if(this.userArea==null){
+          this.$vux.toast.text('你还没有地址信息', 'middle')
+          return
+        }
+        this.area = this.userArea.area+'/'+this.userArea.floor
+        this.areadetail = this.userArea.room
       }
     },
     chooseImage(){
@@ -196,13 +234,21 @@ export default {
 
 <style lang="scss">
 .doRepairBox{
-  .formBox{
+  .repairFormBox{
     width: pxTorem(700px);
     margin:pxTorem(25px) auto;
     box-shadow: #ccc 0px 3px 5px;
     height: auto;
-    background: #fff
+    background: #fff;
+    position: relative;
   }
+  // .areaTips{
+  //   @include wh(100px,100px);
+  //   background: #f00;
+  //   position: absolute;
+  //   top:pxTorem(90px);
+  //   right: 0
+  // }
   .weui-cell:before{
     left:0 !important
   }

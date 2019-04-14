@@ -41,7 +41,7 @@
         <cell title="地址管理" is-link link="/areaManage">
           <i class="icon-location2 icon" slot="icon" :style="{color:RandomColor()}"></i>
         </cell>
-        <cell title="我的消息" is-link>
+        <cell title="我的消息" is-link link="/studentMessage">
           <i class="icon-messages icon" slot="icon" :style="{color:RandomColor()}"></i>
         </cell>
       </group>

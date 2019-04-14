@@ -65,11 +65,7 @@ export default {
   },
   computed:{
     ...mapState({
-        isLoading: state => state.pageSwitch.isLoading,
         userInfo: state => state.userInfo.userInfo,
-    }),
-    ...mapState({
-  　　　 ajaxIsLoading: state => state.ajaxSwitch.ajaxIsLoading
     }),
     toHouer(){
       return function(minutes){
@@ -177,6 +173,7 @@ export default {
   // padding: pxTorem(20px)
 }
 .myRepair{
-  padding: pxTorem(20px)
+  padding: pxTorem(20px);
+  margin-bottom: pxTorem(30px)
 }
 </style>

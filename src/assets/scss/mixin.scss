@@ -1,5 +1,3 @@
-$mixinType:'web';  //web、h5
-
 @charset "utf-8";
 $browser-default-font-size: 75px !default; //变量的值可以根据自己需求定义
 @function pxTorem($px) {
@@ -16,6 +14,14 @@ body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, fo
   padding:0;
   font-family: "PingFangSC-Regular";
   outline:none;
+
+}
+body{
+  margin: 0px auto!important;
+  width:getUnit(750px);
+  font-size: getUnit(28px);
+  font-weight: 400;
+  background-color:#fff;
 }
 
 //边框颜色
@@ -100,7 +106,7 @@ $float:left;
 
 //字体，颜色
 @mixin fc($size, $weight, $color){
-	font-size: getUnit($size);
+	font-size: pxTorem($size);
   font-weight: $weight;
 	color: $color;
 }
@@ -177,17 +183,13 @@ $float:left;
 
 //判断单位
 @function getUnit($unit) {
-  @if $mixinType == 'web' {
+  @if unit($unit) == '%' {
     @return $unit;
-  }@else {
-    @if unit($unit) == '%' {
-      @return $unit;
-    }
-    @else if unit($unit) == 'px'{
-      @return pxTorem($unit);
-    }
-    @else if unit($unit) == ''{
-      @return $unit;
-    }
+  }
+  @else if unit($unit) == 'px'{
+    @return pxTorem($unit);
+  }
+  @else if unit($unit) == ''{
+    @return $unit;
   }
 }

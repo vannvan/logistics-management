@@ -1,5 +1,6 @@
 <template lang="html">
   <div>
+    <x-header>个人信息</x-header>
     <group>
       <cell title="头像" is-link>
         <div>
@@ -19,7 +20,7 @@
           </span>
         </div>
       </cell>
-      <cell title="学号" is-link>
+      <cell title="学号">
         <div>
           <span style="">{{userInfo.student_id}}</span>
         </div>
