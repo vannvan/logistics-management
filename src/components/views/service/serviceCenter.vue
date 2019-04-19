@@ -1,20 +1,22 @@
 <template>
   <div>
-    <swiper loop auto :list="bannerList"></swiper>
-    <divider>后勤服务</divider>
-    <grid :show-lr-borders="false" :cols="3">
-      <grid-item :label="item.title" v-for="(item,index) in serviceList" :key="index">
-        <!-- {{item.title}} -->
-        <img slot="icon" :src="item.url"  @click="getLinkInfo(index,item.linkUrl)">
-      </grid-item>
-    </grid>
-    <divider>便民服务</divider>
-    <grid :show-lr-borders="false" :cols="3">
-      <grid-item :label="item.title" v-for="(item,index) in convenientList" :key="index" :link="item.linkUrl">
-        <!-- {{item.title}} -->
-        <img slot="icon" :src="item.url">
-      </grid-item>
-    </grid>
+    <div class="service_center">
+      <swiper loop auto :list="bannerList"></swiper>
+      <divider>后勤服务</divider>
+      <grid :show-lr-borders="false" :cols="3">
+        <grid-item :label="item.title" v-for="(item,index) in serviceList" :key="index">
+          <!-- {{item.title}} -->
+          <img slot="icon" :src="item.url"  @click="getLinkInfo(index,item.linkUrl)">
+        </grid-item>
+      </grid>
+      <divider>便民服务</divider>
+      <grid :show-lr-borders="false" :cols="3">
+        <grid-item :label="item.title" v-for="(item,index) in convenientList" :key="index" :link="item.linkUrl">
+          <!-- {{item.title}} -->
+          <img slot="icon" :src="item.url">
+        </grid-item>
+      </grid>
+    </div>
   </div>
 </template>
 
@@ -92,6 +94,8 @@ export default {
 }
 </script>
 
-<style lang="css">
-
+<style lang="scss">
+.service_center{
+  margin-bottom: pxTorem(50px)
+}
 </style>

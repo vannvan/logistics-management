@@ -117,6 +117,7 @@ export default {
     if(this.userInfo.student_name==undefined){
       this.$vux.toast.text('请登录', 'middle')
       this.$router.push({path:'/loginReg'})
+      return
     }
     this.getRepairList()
   },

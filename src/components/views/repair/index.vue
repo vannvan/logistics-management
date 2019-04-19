@@ -51,7 +51,7 @@ import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { mapState } from 'vuex'
 import areaList from '@/assets/json/area.js'
 import typeList from '@/assets/json/type.js'
-import { XInput,XHeader,Cell,XTextarea,Popup,XButton,Group,PopupPicker,Actionsheet, TransferDom} from 'vux'
+import { XInput,XHeader,Cell,XTextarea,Popup,XButton,Group,PopupPicker,Actionsheet, TransferDom,Icon} from 'vux'
 export default {
   data(){
     return{
@@ -69,11 +69,11 @@ export default {
       menus: {
         myarea: '使用我的地址',
       },
-      userArea:{}
+      userArea:null
     }
   },
   components:{
-    XInput,XHeader,Cell,XTextarea,Popup,XButton,Group,PopupPicker,Actionsheet, TransferDom
+    XInput,XHeader,Cell,XTextarea,Popup,XButton,Group,PopupPicker,Actionsheet, TransferDom,Icon
   },
   computed:{
     ...mapState({
@@ -83,7 +83,7 @@ export default {
   },
   mounted(){
     // console.log(this.isLogin)
-    if(this.isLogin){
+    if(this.isLogin==true){
       this.getUserArea()
     }
   },
@@ -190,11 +190,15 @@ export default {
     doSubmit(){
       let user_id = this.userInfo.student_id
       let user_name = this.userInfo.student_name
-      let tmpPhotoFile = JSON.parse(JSON.stringify(this.photoFile))
-      // let tmpVisitorsList=this.deepClone(this.visitorsList)
-      for(let i=0;i<tmpPhotoFile.length;i++){
-        delete tmpPhotoFile[i].absolute_path
-        delete tmpPhotoFile[i].user_id
+      // let tmpPhotoFile = JSON.parse(JSON.stringify(this.photoFile))
+      // // let tmpVisitorsList=this.deepClone(this.visitorsList)
+      // for(let i=0;i<tmpPhotoFile.length;i++){
+      //   delete tmpPhotoFile[i].absolute_path
+      //   delete tmpPhotoFile[i].user_id
+      // }
+      let servicePhoto = []
+      for(let i=0;i<this.photoFile.length;i++){
+        servicePhoto.push(this.photoFile[i].relative_path)
       }
       if(this.isLogin==false){
         this.showModule('该模块需要登录！')
@@ -208,7 +212,7 @@ export default {
         details:this.details,
         user_id:user_id,
         user_name:user_name,
-        photoFile:JSON.stringify(tmpPhotoFile),
+        photoFile:JSON.stringify(servicePhoto),
         area_:this.area.substring(0,2)
       }
       // console.log(datas)

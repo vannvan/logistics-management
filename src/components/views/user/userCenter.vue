@@ -2,7 +2,7 @@
   <div>
     <div class="baseInfoBox">
       <div class="headImg">
-        <template v-if="userInfo.headimg_path!=null">
+        <template v-if="JSON.stringify(userInfo)!='{}'">
           <img :src="userInfo.headimg_path" alt=""  @click="toDetailInfo()">
         </template>
         <template v-else>

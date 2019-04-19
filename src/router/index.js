@@ -24,77 +24,77 @@ export default new Router({
           path: '/communityCenter',
           component: resolve => require(['@/components/views/community/communityCenter'], resolve),
           meta:{
-              title:'公开信息'
+              title:'公开信息',auth:false
           }
         },
         {
           path: '/inspectDetail',
           component: resolve => require(['@/components/views/community/inspectDetail'], resolve),
           meta:{
-              title:'监督详情'
+              title:'监督详情',auth:false
           }
         },
         {
           path: '/repairDetail',
           component: resolve => require(['@/components/views/community/repairDetail'], resolve),
           meta:{
-              title:'保修详情'
+              title:'保修详情',auth:false
           }
         },
         {
           path: '/serviceCenter',
           component: resolve => require(['@/components/views/service/serviceCenter'], resolve),
           meta:{
-              title:'服务中心'
+              title:'服务中心',auth:false
           }
         },
         {
           path: '/studentMessage',
           component: resolve => require(['@/components/views/user/message'], resolve),
           meta:{
-              title:'我的消息'
+              title:'我的消息',auth:true
           }
         },
         {
           path: '/areaManage',
           component: resolve => require(['@/components/views/user/areaManage'], resolve),
           meta:{
-              title:'地址管理'
+              title:'地址管理',auth:true
           }
         },
         {
           path: '/repair',
           component: resolve => require(['@/components/views/repair/index'], resolve),
           meta:{
-              title:'维修中心'
+              title:'维修中心',auth:false
           }
         },
         {
           path: '/myRepair',
           component: resolve => require(['@/components/views/user/myRepair'], resolve),
           meta:{
-              title:'报修纪录'
+              title:'报修纪录',auth:true
           }
         },
         {
           path: '/myRepairDetails',
           component: resolve => require(['@/components/views/user/repairDetails'], resolve),
           meta:{
-              title:'我的报修纪录'
+              title:'我的报修纪录',auth:true
           }
         },
         {
           path: '/loginReg',
           component: resolve => require(['@/components/views/user/loginReg'], resolve),
           meta:{
-              title:'登录'
+              title:'登录',auth:false
           }
         },
         {
           path: '/detailInfo',
           component: resolve => require(['@/components/views/user/detailInfo'], resolve),
           meta:{
-              title:'个人信息'
+              title:'个人信息',auth:true
           }
         }
 

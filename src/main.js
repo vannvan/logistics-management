@@ -14,6 +14,9 @@ Vue.use(AlertPlugin);
 Vue.use(ConfirmPlugin);
 Vue.use(WechatPlugin);
 
+import gallery from 'img-vuer'
+Vue.use(gallery)
+
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
 /* eslint-disable no-new */

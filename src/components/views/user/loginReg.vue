@@ -49,7 +49,7 @@ export default {
 
   },
   mounted() {
-    this.$store.commit('setUserInfo',)
+    this.$store.commit('setUserInfo',{})
     this.$store.commit('setIsLogin',false)
   },
   methods: {

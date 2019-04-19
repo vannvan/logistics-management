@@ -17,6 +17,17 @@
           <span class="icon-location" style="overflow:hidden">{{repairDatail.area}}</span>
         </p>
       </div>
+      <!-- 图片 -->
+      <template  v-if="repairDatail.photoFile!=null">
+        <div class="photoBox clearfix">
+          <template v-for="(item, index) in JSON.parse(repairDatail.photoFile)">
+            <div class="imgItem">
+              <!-- <img :src="photo_ab_url+item" alt="" ref="preView.getImgUrl"> -->
+              <img v-gallery :src="photo_ab_url+item">
+            </div>
+          </template>
+        </div>
+      </template>
       <divider>进度详情</divider>
       <div class="processBox clearfix">
           <template v-for="(item, index) in processList">
@@ -53,6 +64,7 @@
 </template>
 
 <script>
+const domain_url = 'http://127.0.0.1/composerProject/logistics-management-api/uploads/'
 import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { mapState } from 'vuex'
 import { formatDate } from '@/assets/js/date.js';
@@ -64,7 +76,8 @@ export default {
       repairId:'',
       isLoaded:false,
       processList:[],
-      isDisabled:false
+      isDisabled:false,
+      photo_ab_url:domain_url
     }
   },
   components: {
@@ -184,13 +197,20 @@ export default {
   .vux-divider{
     padding: 10px 3% !important;
   }
-  .detailBox,.processBox,.raterBox{
+  .detailBox,.processBox,.raterBox,.photoBox{
     width: 90%;
     height: auto;
     margin: pxTorem(25px) auto 0 auto;
     background: #F2F7F0;
     padding: 8px 8px 15px 8px;
     box-shadow: #ccc 0px 3px 5px;
+  }
+  .imgItem{
+    img{
+      width: 20%;
+      margin-right: 10%;
+      float: left;
+    }
   }
   .detail_title{
     height: auto;

@@ -50,7 +50,7 @@ export default {
   },
   mounted() {
     //do something after mounting vue instance
-    this.$store.commit('setUserInfo',)
+    this.$store.commit('setUserInfo',{})
     this.$store.commit('setIsLogin',false)
   },
   methods: {

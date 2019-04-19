@@ -50,6 +50,13 @@ const store = new Vuex.Store({
 
     router.beforeEach(function (to, from, next) {
       if(to.meta.title){
+        let userInfo = store.state.userInfo
+        if(userInfo.isLoign==false&&to.meta.auth){
+          console.log('需要登录')
+          store.commit('updateLoadingStatus', {isLoading: false})
+          next({ path: '/loginReg' })   //  跳转到login页面
+          return
+        }
         document.title = to.meta.title
       }
       store.commit('updateLoadingStatus', {isLoading: true})

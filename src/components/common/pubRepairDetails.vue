@@ -18,6 +18,18 @@
           <span class="icon-location" style="overflow:hidden">{{repairDatail.area}}</span>
         </p>
       </div>
+      <!-- 图片 -->
+      <template  v-if="repairDatail.photoFile!=null">
+        <div class="photoBox clearfix">
+          <template v-for="(item, index) in JSON.parse(repairDatail.photoFile)">
+            <div class="imgItem">
+              <!-- <img :src="photo_ab_url+item" alt="" ref="preView.getImgUrl"> -->
+              <img v-gallery :src="photo_ab_url+item">
+            </div>
+          </template>
+        </div>
+      </template>
+
       <!-- 是管理员且未审核的 -->
       <template v-if="repairDatail.process==1&&userInfo.userType=='admin'">
         <divider>派工维修</divider>
@@ -41,7 +53,6 @@
                 {{areaType}}暂无{{workerType}}维修工
               </div>
             </template>
-
           </div>
         </div>
       </template>
@@ -104,11 +115,12 @@
 </template>
 
 <script>
+const domain_url = 'http://127.0.0.1/composerProject/logistics-management-api/uploads/'
 import URL_CONFIG from '@/assets/js/urlConfig.js';
 import workerPop from '@/components/common/workerPop'
 import { mapState } from 'vuex'
 import { formatDate } from '@/assets/js/date.js';
-import { Badge,XHeader,LoadMore,Divider,Group,Cell,XButton,Rater } from 'vux'
+import { Badge,XHeader,LoadMore,Divider,Group,Cell,XButton,Rater  } from 'vux'
 export default {
   data(){
     return{
@@ -123,7 +135,8 @@ export default {
       },
       areaType:'',
       workerType:'',
-      workerInfo:[]
+      workerInfo:[],
+      photo_ab_url:domain_url
     }
   },
   components: {
@@ -135,7 +148,7 @@ export default {
     Cell,
     workerPop,
     XButton,
-    Rater
+    Rater,
   },
   filters:{
     date:function(timestamp){
@@ -207,7 +220,8 @@ export default {
       this.isLoaded=true
       this.repairDatail=data
       this.processList=data.processInfo
-      if(this.userInfo.userType=='admin'){
+      console.log(this.repairDatail.photoFile)
+      if(this.userInfo.userType=='admin'&&this.repairDatail.process!=5){
         this.getWorkerList()
       }
       // 当工单状态为3的时候获取维修工信息
@@ -278,7 +292,8 @@ export default {
   .vux-divider{
     padding: 10px 3% !important;
   }
-  .workerBox,.raterBox,.processBox,.detailBox,.workerActionBox,.workerInfo{
+
+  .workerBox,.raterBox,.processBox,.detailBox,.workerActionBox,.workerInfo,.photoBox{
     width: 90%;
     height: auto;
     margin: pxTorem(25px) auto 0 auto;
@@ -291,6 +306,13 @@ export default {
     }
     .weui-cells{
       background: #f2f7f0 !important
+    }
+  }
+  .imgItem{
+    img{
+      width: 20%;
+      margin-right: 10%;
+      float: left;
     }
   }
   .emptyWorker{

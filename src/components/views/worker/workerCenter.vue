@@ -3,8 +3,8 @@
     <div class="workerCenter">
       <div class="baseInfoBox">
         <div class="headImg">
-          <template v-if="userInfo.headimg_path!=null">
-            <img :src="userInfo.headimg_path" alt=""  @click="toDetailInfo()">
+          <template v-if="JSON.stringify(userInfo)!='{}'&&userInfo.headimg_path!=null">
+              <img :src="userInfo.headimg_path" alt=""  @click="toDetailInfo()">
           </template>
           <template v-else>
             <img src="@/assets/images/defaultPhoto.png" alt="">
