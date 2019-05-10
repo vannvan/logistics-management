@@ -51,7 +51,7 @@ import URL_CONFIG from '@/assets/js/urlConfig.js';
 import { mapState } from 'vuex'
 import areaList from '@/assets/json/area.js'
 import typeList from '@/assets/json/type.js'
-import { XInput,XHeader,Cell,XTextarea,Popup,XButton,Group,PopupPicker,Actionsheet, TransferDom,Icon} from 'vux'
+import { XInput,XHeader,Cell,XTextarea,Popup,XButton,Group,PopupPicker,Actionsheet, TransferDom,Icon,AlertModule} from 'vux'
 export default {
   data(){
     return{
@@ -73,7 +73,7 @@ export default {
     }
   },
   components:{
-    XInput,XHeader,Cell,XTextarea,Popup,XButton,Group,PopupPicker,Actionsheet, TransferDom,Icon
+    XInput,XHeader,Cell,XTextarea,Popup,XButton,Group,PopupPicker,Actionsheet, TransferDom,Icon,AlertModule
   },
   computed:{
     ...mapState({

@@ -17,7 +17,7 @@ export default new Router({
           path: '/userCenter',
           component: resolve => require(['@/components/views/user/userCenter'], resolve),
           meta:{
-              title:'个人中心'
+              title:'个人中心',auth:false
           }
         },
         {
